@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.sabarno</groupId>
 	<artifactId>accounts</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>accounts</name>
 	<description>Microservice for Accounts</description>
@@ -68,8 +68,8 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
+			<groupId>com.mysql</groupId>
+			<artifactId>mysql-connector-j</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
@@ -128,7 +128,7 @@
 					<version>3.4.2</version>
 					<configuration>
 							<to>
-									<image>sabarnobiswas2002/${project.artifactId}:v0.0.1</image>
+									<image>sabarnobiswas2002/${project.artifactId}:v0.0.2</image>
 							</to>
 					</configuration>
 			</plugin>
