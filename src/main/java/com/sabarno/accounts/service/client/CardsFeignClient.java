@@ -12,6 +12,8 @@ import com.sabarno.accounts.dto.CardsDto;
 public interface CardsFeignClient {
 
     @GetMapping(value = "/api/fetch",consumes = "application/json")
-    public ResponseEntity<CardsDto> fetchCardDetails(@RequestParam String mobileNumber);
+    public ResponseEntity<CardsDto> fetchCardDetails(
+            @RequestParam("eazybank-correlation-id") String correlationId,
+        @RequestParam String mobileNumber);
 
 }
