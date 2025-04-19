@@ -1,5 +1,7 @@
 package com.sabarno.accounts.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
@@ -23,6 +25,7 @@ import com.sabarno.accounts.dto.ErrorResponseDto;
 import com.sabarno.accounts.dto.ResponseDto;
 import com.sabarno.accounts.service.IAccountsService;
 
+import io.github.resilience4j.retry.annotation.Retry;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -38,6 +41,7 @@ import jakarta.validation.constraints.Pattern;
 @Validated
 public class AccountsController {
 
+  private static final Logger logger = LoggerFactory.getLogger(AccountsController.class);
   private final IAccountsService iAccountsService;
 
   public AccountsController(IAccountsService iAccountsService) {
@@ -51,7 +55,7 @@ public class AccountsController {
   private Environment environment;
 
   @Autowired
-    private AccountsContactInfoDto accountsContactInfoDto;
+  private AccountsContactInfoDto accountsContactInfoDto;
 
   @Operation(summary = "Create Account REST API", description = "REST API to create new Customer &  Account inside EazyBank")
   @ApiResponses({
@@ -124,11 +128,20 @@ public class AccountsController {
       @ApiResponse(responseCode = "200", description = "HTTP Status OK"),
       @ApiResponse(responseCode = "500", description = "HTTP Status Internal Server Error", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
   })
+  @Retry(name = "getBuildInfo", fallbackMethod = "getBuildInfoFallback")
   @GetMapping("/build-info")
   public ResponseEntity<String> getBuildInfo() {
+    logger.debug("getBuildInfo() method Invoked");
     return ResponseEntity
         .status(HttpStatus.OK)
         .body(buildVersion);
+  }
+
+  public ResponseEntity<String> getBuildInfoFallback(Throwable throwable) {
+    logger.debug("getBuildInfoFallback() method Invoked");
+    return ResponseEntity
+        .status(HttpStatus.OK)
+        .body("0.9");
   }
 
   @Operation(summary = "Get Java version", description = "Get Java versions details that is installed into accounts microservice")
@@ -143,30 +156,16 @@ public class AccountsController {
         .body(environment.getProperty("JAVA_HOME"));
   }
 
-  @Operation(
-            summary = "Get Contact Info",
-            description = "Contact Info details that can be reached out in case of any issues"
-    )
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "HTTP Status OK"
-            ),
-            @ApiResponse(
-                    responseCode = "500",
-                    description = "HTTP Status Internal Server Error",
-                    content = @Content(
-                            schema = @Schema(implementation = ErrorResponseDto.class)
-                    )
-            )
-    }
-    )
+  @Operation(summary = "Get Contact Info", description = "Contact Info details that can be reached out in case of any issues")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200", description = "HTTP Status OK"),
+      @ApiResponse(responseCode = "500", description = "HTTP Status Internal Server Error", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+  })
   @GetMapping("/contact-info")
-    public ResponseEntity<AccountsContactInfoDto> getContactInfo() {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(accountsContactInfoDto);
-    }
-
+  public ResponseEntity<AccountsContactInfoDto> getContactInfo() {
+    return ResponseEntity
+        .status(HttpStatus.OK)
+        .body(accountsContactInfoDto);
+  }
 
 }
