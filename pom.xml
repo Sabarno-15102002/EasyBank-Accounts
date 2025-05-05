@@ -151,7 +151,7 @@
 					<version>3.4.2</version>
 					<configuration>
 							<to>
-									<image>sabarnobiswas2002/${project.artifactId}:v1.1.0</image>
+									<image>sabarnobiswas2002/${project.artifactId}:v1.2.0</image>
 							</to>
 					</configuration>
 			</plugin>
