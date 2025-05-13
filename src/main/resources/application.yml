@@ -72,7 +72,7 @@ info:
   app:
     name: "accounts"
     description: "Eazy Bank Accounts Application"
-    version: "1.3.0"
+    version: "1.4.0"
 
 logging:
   level:

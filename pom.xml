@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.sabarno</groupId>
 	<artifactId>accounts</artifactId>
-	<version>1.3.0</version>
+	<version>1.4.0</version>
 	<packaging>jar</packaging>
 	<name>accounts</name>
 	<description>Microservice for Accounts</description>
@@ -159,7 +159,7 @@
 					<version>3.4.2</version>
 					<configuration>
 							<to>
-									<image>sabarnobiswas2002/${project.artifactId}:v1.3.0</image>
+									<image>sabarnobiswas2002/${project.artifactId}:v1.4.0</image>
 							</to>
 					</configuration>
 			</plugin>
